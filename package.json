@@ -1,0 +1,33 @@
+{
+  "name": "happy-helpers",
+  "private": false,
+  "version": "1.0.0",
+  "description": "Some helpful javascript functions",
+  "main": "lib/main.js",
+  "license": "MIT",
+  "author": "Don Denton",
+  "scripts": {
+    "lint": "eslint src/main.js",
+    "posttest": "npm run lint",
+    "release:major": "npm version major && git push --follow-tags",
+    "release:minor": "npm version minor && git push --follow-tags",
+    "release:patch": "npm version patch && git push --follow-tags",
+    "start": "npm run test",
+    "test": "jest --watch",
+    "build": "babel -s inline -d lib --ignore *.spec.js src",
+    "prepublish": "npm test && npm run build"
+  },
+  "repository": "https://github.com/happycollision/helpfuljs",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-jest": "^19.0.0",
+    "babel-plugin-transform-es2015-modules-umd": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
+    "eslint": "^3.16.0",
+    "jest": "^19.0.0"
+  }
+}
