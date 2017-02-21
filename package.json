@@ -14,8 +14,9 @@
     "release:patch": "npm version patch && git push --follow-tags",
     "start": "npm run test",
     "test": "jest --watch",
+    "pubtest": "jest",
     "build": "babel -s inline -d lib --ignore *.spec.js src",
-    "prepublish": "npm test && npm run build"
+    "prepublish": "npm run pubtest && npm run build"
   },
   "repository": "https://github.com/happycollision/helpfuljs",
   "publishConfig": {
