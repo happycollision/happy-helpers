@@ -35,6 +35,7 @@ export function isEmpty (val) {
   let type = toType(val);
   if (emptyTypes.indexOf(type) > -1) { return true; }
   if (checkableTypes.indexOf(type) > -1) {
+    if (type === 'string') return val.length === 0; // IE fails on the next line if a string.
     if (Object.getOwnPropertyNames(val).length === 0) return true;
     return val.length === 0;
   }
