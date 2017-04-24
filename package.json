@@ -18,7 +18,7 @@
     "build": "babel -s inline -d lib --ignore *.spec.js src",
     "prepublish": "npm run pubtest && npm run build"
   },
-  "repository": "https://github.com/happycollision/helpfuljs",
+  "repository": "https://github.com/happycollision/happy-helpers",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
