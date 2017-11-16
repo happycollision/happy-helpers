@@ -148,7 +148,7 @@ export function valuesArrayFromObject (obj) {
   return Object.keys(obj).map(key => obj[key]);
 }
 
-export function objectContainsValue(val, obj) {
+export function objectContainsValue (val, obj) {
   return valuesArrayFromObject(obj).indexOf(val) !== -1;
 }
 
@@ -167,6 +167,34 @@ export function forceArray (val) {
     return [val];
   }
   return val;
+}
+
+const noCircularRefs = () => {
+  const valCache = [];
+  const keyCache = [];
+  let isFirstRun = true;
+
+  return (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (isFirstRun) {
+        key = '__BASE_OBJECT__'; // eslint-disable-line no-param-reassign
+        isFirstRun = false;
+      }
+      const indexOfFoundValue = valCache.indexOf(value);
+      if (indexOfFoundValue !== -1) {
+        // Circular reference found, discard key
+        return `[circular reference of ${keyCache[indexOfFoundValue]}]`;
+      }
+      // Store value in our collection
+      valCache.push(value);
+      keyCache.push(key);
+    }
+    return value; // eslint-disable-line consistent-return
+  };
+};
+
+export function stringify (obj, spacing) {
+  return JSON.stringify(obj, noCircularRefs(), spacing || 2);
 }
 
 /*
