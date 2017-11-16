@@ -193,8 +193,12 @@ const noCircularRefs = () => {
   };
 };
 
-export function stringify (obj, spacing) {
-  return JSON.stringify(obj, noCircularRefs(), spacing || 2);
+export function stringify (obj, {tabLength: tabLength, stripQuotes: stripQuotes} = {}) {
+  let string = JSON.stringify(obj, noCircularRefs(), tabLength || 2);
+  if (stripQuotes) {
+    string = string.replace(/"(.*?)": /g, '$1: ');
+  }
+  return string;
 }
 
 /*

@@ -162,6 +162,50 @@ describe('objectKeyForValue', () => {
   });
 });
 
+describe('stringify', () => {
+  let stringify = hf.stringify;
+  it('returns a pretty string for an object', () => {
+    const obj = {name: 'Stanley', demeanor: 'angry'}
+    expect(stringify(obj)).toEqual(
+      '{'                        + '\n' +
+      '  "name": "Stanley",'     + '\n' +
+      '  "demeanor": "angry"'    + '\n' +
+      '}'
+    );
+  });
+  it('returns a pretty string with your desired tab length', () => {
+    const obj = {name: 'Stanley', demeanor: 'angry'}
+    expect(stringify(obj, {tabLength: 4})).toEqual(
+      '{'                        + '\n' +
+      '    "name": "Stanley",'     + '\n' +
+      '    "demeanor": "angry"'    + '\n' +
+      '}'
+    );
+  });
+  it('strips unnecessary quotes', () => {
+    const obj = {name: 'Stanley', demeanor: 'angry'}
+    expect(stringify(obj, {stripQuotes: true})).toEqual(
+      '{'                        + '\n' +
+      '  name: "Stanley",'     + '\n' +
+      '  demeanor: "angry"'    + '\n' +
+      '}'
+    );
+  });
+  it('handles circular references gracefully', () => {
+    class Circ {
+      constructor() {
+        this.me = this
+      }
+    }
+    let circ = new Circ();
+    expect(stringify(circ)).toEqual(
+      '{'                                                     + '\n' +
+      '  "me": "[circular reference of __BASE_OBJECT__]"'     + '\n' +
+      '}'
+    );
+  });
+});
+
 describe('isEmpty', () => {
   let isEmpty = hf.isEmpty;
   it('is true for undefined', () => {
