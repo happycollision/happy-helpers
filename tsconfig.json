@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "module": "es2015",
     "target": "es5",
     "importHelpers": true,
     "moduleResolution": "node",
@@ -9,11 +8,15 @@
     "sourceMap": true,
     "allowJs": true,
     "noImplicitAny": false,
+    "outDir": "lib",
     "lib": [
       "es2015"
     ]
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "**/*.spec.*"
   ]
 }

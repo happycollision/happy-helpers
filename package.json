@@ -15,7 +15,7 @@
     "start": "npm run test",
     "test": "jest --watch",
     "pubtest": "jest",
-    "build": "babel -s inline -d lib --ignore *.spec.js src",
+    "build": "tsc",
     "prepublish": "npm run pubtest && npm run build"
   },
   "repository": "https://github.com/happycollision/happy-helpers",
@@ -24,11 +24,6 @@
   },
   "keywords": [],
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "useBabelrc": true
-      }
-    },
     "transform": {
       "^.+\\.(t|j)sx?$": "ts-jest"
     },
@@ -41,11 +36,6 @@
   "devDependencies": {
     "@types/jest": "^22.2.2",
     "@types/node": "^9.6.4",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-plugin-transform-es2015-modules-umd": "^6.23.0",
-    "babel-preset-es2015": "^6.22.0",
-    "eslint": "^3.16.0",
     "jest": "^22.4.3",
     "ts-jest": "^22.4.2",
     "ts-node": "^5.0.1",
