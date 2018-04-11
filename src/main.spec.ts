@@ -193,6 +193,7 @@ describe('stringify', () => {
   });
   it('handles circular references gracefully', () => {
     class Circ {
+      me: any;
       constructor() {
         this.me = this
       }

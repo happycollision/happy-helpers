@@ -16,13 +16,13 @@
     toType(); //"undefined"
     toType( () => {} ); //"function"
 */
-export function toType (val) {
+export function toType (val?) {
   return ({}).toString.call(val).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
 }
 
 export function round(value, decimals) {
   decimals = decimals === undefined ? 2 : decimals;
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  return Number(Math.round(Number(value+'e'+decimals))+'e-'+decimals);
 }
 
 export function clone(obj) {
@@ -67,7 +67,8 @@ export function traverseObject (obj, callback, recursive = false, preserveOrigin
   for (let key in newObject) {
     if (newObject.hasOwnProperty(key) === false) continue;
     if ( isObject(newObject[key]) && recursive ) {
-      let argsMinusFirst = [...arguments].slice(1);
+      const args = Array.from(arguments);
+      let argsMinusFirst = [...args].slice(1);
       let recursedObject = traverseObject.apply(this, [newObject[key], ...argsMinusFirst]);
       if (!isEmpty(recursedObject)) {
         newObject[key] = recursedObject;
@@ -193,8 +194,9 @@ const noCircularRefs = () => {
   };
 };
 
-export function stringify (obj, {tabLength: tabLength, stripQuotes: stripQuotes} = {}) {
-  let string = JSON.stringify(obj, noCircularRefs(), tabLength || 2);
+export function stringify (obj, options = {}) {
+  const {tabLength, stripQuotes} = Object.assign({tabLength: 2, stripQuotes: false}, options);
+  let string = JSON.stringify(obj, noCircularRefs(), tabLength);
   if (stripQuotes) {
     string = string.replace(/"(.*?)": /g, '$1: ');
   }
