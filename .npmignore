@@ -1,5 +1,7 @@
 node_modules
-.babelrc
-.eslintrc.json
-
+tsconfig.json
 src
+yarn.lock
+
+.gitignore
+.gitattributes
