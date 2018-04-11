@@ -4,6 +4,7 @@
   "version": "1.2.0",
   "description": "Some helpful javascript functions",
   "main": "lib/main.js",
+  "types": "lib/main.d.ts",
   "license": "MIT",
   "author": "Don Denton",
   "scripts": {

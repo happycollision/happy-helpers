@@ -4,6 +4,9 @@ I have found tons of use for all these functions. If I don't ever find time to d
 
 # Changelog
 
+### 1.2.1
+* update package to export types properly
+
 ## 1.2.0
 * Adds Typescript types
 * fixes a couple bugs caught by Typescript
