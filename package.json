@@ -17,7 +17,7 @@
     "test": "jest --watch",
     "pubtest": "jest",
     "build": "tsc",
-    "prepublish": "npm run pubtest && npm run build"
+    "prepublishOnly": "npm run pubtest && npm run build"
   },
   "repository": "https://github.com/happycollision/happy-helpers",
   "publishConfig": {
