@@ -4,6 +4,10 @@ I have found tons of use for all these functions. If I don't ever find time to d
 
 # Changelog
 
+## 1.2.0
+* Adds Typescript types
+* fixes a couple bugs caught by Typescript
+
 ### 1.1.1
 * updates this changelog to add 1.1.0. Oops.
 
