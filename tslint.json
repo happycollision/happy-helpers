@@ -1,0 +1,22 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "arrow-parens": false,
+        "curly": {
+            "options": "ignore-same-line"
+        },
+        "max-line-length": false,
+        "object-literal-sort-keys": false,
+        "quotemark": {
+            "options": ["single", "avoid-escape", "avoid-template"]
+        },
+        "space-before-function-paren": {
+            "severity": "off"
+        }
+    },
+    "rulesDirectory": []
+}

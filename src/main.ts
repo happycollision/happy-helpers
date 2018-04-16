@@ -21,7 +21,7 @@ export function toType (val?: any): string {
 }
 
 export function round(value: number, decimals: number = 2): number {
-  return Number(Math.round(Number(value+'e'+decimals))+'e-'+decimals);
+  return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals);
 }
 
 export function clone<T extends object | any[]>(obj: T): T {
@@ -29,9 +29,9 @@ export function clone<T extends object | any[]>(obj: T): T {
 }
 
 export function isEmpty (val: any): boolean {
-  let emptyTypes = ['null', 'undefined'];
-  let checkableTypes = ['object', 'array', 'arguments', 'json', 'string'];
-  let type = toType(val);
+  const emptyTypes = ['null', 'undefined'];
+  const checkableTypes = ['object', 'array', 'arguments', 'json', 'string'];
+  const type = toType(val);
   if (emptyTypes.indexOf(type) > -1) { return true; }
   if (checkableTypes.indexOf(type) > -1) {
     if (type === 'string') return val.length === 0; // IE fails on the next line if a string.
@@ -51,8 +51,8 @@ export function wrapObjectWithProperty<T extends object, K extends string> (
   propName: K,
   preserveOriginal = true,
 ): {[P in K]: T} {
-  let wrapper = {} as {[P in K]: T};
-  let newObj = preserveOriginal ? clone(obj) : obj;
+  const wrapper = {} as {[P in K]: T};
+  const newObj = preserveOriginal ? clone(obj) : obj;
   wrapper[propName] = newObj;
   return wrapper;
 }
@@ -70,19 +70,19 @@ export function traverseObject<T extends object> (
   recursive = false,
   preserveOriginal = true,
 ): T | any {
-  let newObject = preserveOriginal ? clone(obj) : obj;
-  let returnedObj = {};
-  for (let key in newObject) {
+  const newObject = preserveOriginal ? clone(obj) : obj;
+  const returnedObj = {};
+  for (const key in newObject) {
     if (newObject.hasOwnProperty(key) === false) continue;
     if ( isObject(newObject[key]) && recursive ) {
       const args = Array.from(arguments);
-      let argsMinusFirst = [...args].slice(1);
-      let recursedObject = traverseObject.apply(this, [newObject[key], ...argsMinusFirst]);
+      const argsMinusFirst = [...args].slice(1);
+      const recursedObject = traverseObject.apply(this, [newObject[key], ...argsMinusFirst]);
       if (!isEmpty(recursedObject)) {
         newObject[key] = recursedObject;
       }
     }
-    let keyValArray = callback(key, newObject[key]);
+    const keyValArray = callback(key, newObject[key]);
     if (Array.isArray(keyValArray) && keyValArray.length === 2) {
       returnedObj[keyValArray[0]] = keyValArray[1];
     } else if (!isEmpty(keyValArray)) {
@@ -100,12 +100,12 @@ export function nestedPropertyDetails (
   existingPath: string,
   finalValidProperty: any,
 } {
-  let pathParts = propertyPath.split('.');
+  const pathParts = propertyPath.split('.');
   let currentObject = obj;
   let exists = true;
-  let existingPath: string[] = [];
+  const existingPath: string[] = [];
   while (exists && pathParts.length > 0) {
-    let newPart = pathParts.shift();
+    const newPart = pathParts.shift();
     if (newPart && currentObject[newPart]) {
       existingPath.push(newPart);
       currentObject = currentObject[newPart];
@@ -123,9 +123,9 @@ export function nestedPropertyDetails (
 export function nestedPropertyTest (
   obj: object,
   propertyPath: string,
-  callback: (value: any) => boolean
+  callback: (value: any) => boolean,
 ): boolean {
-  let details = nestedPropertyDetails(obj, propertyPath);
+  const details = nestedPropertyDetails(obj, propertyPath);
   if (details.exists) {
     return !!callback(details.finalValidProperty);
   }
@@ -145,14 +145,14 @@ export function changePropsInitialCase (
   recursive = false,
   preserveOriginal = true,
 ): object {
-  let makeAspVersion = (whichCase === 'UpperFirst') ? true : false ;
-  let newObj = preserveOriginal ? clone(obj) : obj;
-  let regex = makeAspVersion ? /[a-z]/ : /[A-z]/;
+  const makeAspVersion = (whichCase === 'UpperFirst') ? true : false ;
+  const newObj = preserveOriginal ? clone(obj) : obj;
+  const regex = makeAspVersion ? /[a-z]/ : /[A-z]/;
   return traverseObject(newObj, (key, prop) => {
-    let originals: [string, any] = [key, prop];
+    const originals: [string, any] = [key, prop];
     if (typeof key !== 'string') return originals;
     if (key.charAt(0).match(regex) === null) return originals;
-    let newKey = makeAspVersion ? firstCharToUpper(key) : firstCharToLower(key);
+    const newKey = makeAspVersion ? firstCharToUpper(key) : firstCharToLower(key);
     return [newKey, prop];
   }, recursive);
 }
@@ -187,14 +187,14 @@ export function objectContainsValue (val: any, obj: object): boolean {
 export function objectKeyForValue<T extends object, K extends keyof T> (val: any, obj: T): false | K {
   if (!objectContainsValue(val, obj)) return false;
   return (Object.keys(obj) as K[]).reduce((a, currentKey: K) => {
-    if (obj[currentKey] === val) {a = currentKey;}
+    if (obj[currentKey] === val) { a = currentKey; }
     return a;
   }, '' as K);
 }
 
 export function forceArray<T> (val: T | T[]): T[] {
   const emptyReturns = ['null', 'undefined'];
-  if (emptyReturns.indexOf(toType(val)) != -1) return [];
+  if (emptyReturns.indexOf(toType(val)) !== -1) return [];
   if (toType(val) !== 'array') {
     return [val] as T[];
   }
@@ -227,11 +227,11 @@ const noCircularRefs = () => {
 
 export function stringify (obj, options = {}): string {
   const {tabLength, stripQuotes} = Object.assign({tabLength: 2, stripQuotes: false}, options);
-  let string = JSON.stringify(obj, noCircularRefs(), tabLength);
+  let str = JSON.stringify(obj, noCircularRefs(), tabLength);
   if (stripQuotes) {
-    string = string.replace(/"(.*?)": /g, '$1: ');
+    str = str.replace(/"(.*?)": /g, '$1: ');
   }
-  return string;
+  return str;
 }
 
 /*
