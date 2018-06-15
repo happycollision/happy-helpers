@@ -1,7 +1,10 @@
-
+export enum Schedule {
+  Monthly = 'monthly'
+}
 
 export class RepeatableEvent {
   public startingDate: Date;
+  protected schedule: Schedule;
 
   constructor(
     startingDate: string | Date,
@@ -9,6 +12,22 @@ export class RepeatableEvent {
   ) {
     this.validateConstructorInput(startingDate);
     this.startingDate = new Date(startingDate);
+  }
+
+  setSchedule(schedule: Schedule) {
+    this.validateSetScheduleInput(schedule);
+    this.schedule = schedule;
+  }
+
+  private validateSetScheduleInput(schedule: Schedule) {
+    if (
+      Object.keys(Schedule)
+        .map(x => Schedule[x].toLowerCase())
+        .indexOf(schedule.toLowerCase())
+      === -1
+    ) {
+      throw new Error(`Invalid schedule type "${schedule}" given`);
+    }
   }
 
   private validateConstructorInput(startingDate): void {

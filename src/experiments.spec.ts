@@ -19,4 +19,14 @@ describe('RepeatableEvent', () => {
       expect(new RepeatableEvent('2001-01-01', 'My Event').label).toEqual('My Event');
     })
   })
+
+  describe('setSchedule', () => {
+    let repeatable: RepeatableEvent;
+    beforeEach(() => repeatable = new RepeatableEvent('2001-01-01'));
+
+    it('allows only certain strings', () => {
+      expect(() => repeatable.setSchedule('monthly')).not.toThrow();
+      expect(() => repeatable.setSchedule('monthlly')).toThrow();
+    })
+  })
 });
