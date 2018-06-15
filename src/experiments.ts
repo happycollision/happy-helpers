@@ -1,6 +1,16 @@
-export enum Schedule {
-  Monthly = 'monthly'
+// See https://basarat.gitbooks.io/typescript/content/docs/types/literal-types.html
+function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
+  return o.reduce((res, key) => {
+    res[key] = key;
+    return res;
+  }, Object.create(null));
 }
+
+export const Schedule = strEnum([
+  'monthly',
+]);
+
+export type Schedule = keyof typeof Schedule;
 
 export class RepeatableEvent {
   public startingDate: Date;

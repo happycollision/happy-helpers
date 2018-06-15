@@ -26,7 +26,8 @@ describe('RepeatableEvent', () => {
 
     it('allows only certain strings', () => {
       expect(() => repeatable.setSchedule('monthly')).not.toThrow();
-      expect(() => repeatable.setSchedule('monthlly')).toThrow();
+      // @ts-ignore
+      expect(() => repeatable.setSchedule('monthlly')).toThrowError('monthlly');
     })
   })
 });
