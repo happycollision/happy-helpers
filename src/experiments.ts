@@ -1,9 +1,12 @@
 
 
 export class RepeatableEvent {
-  startingDate: Date;
+  public startingDate: Date;
 
-  constructor(startingDate: string | Date) {
+  constructor(
+    startingDate: string | Date,
+    public label?: string,
+  ) {
     this.validateConstructorInput(startingDate);
     this.startingDate = new Date(startingDate);
   }
