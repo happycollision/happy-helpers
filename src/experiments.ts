@@ -14,17 +14,21 @@ export type Schedule = keyof typeof Schedule;
 
 export class RepeatableEvent {
   public startingDate: Date;
+  public label: string;
   protected schedule: Schedule;
 
   constructor(
     startingDate: string | Date,
-    public label?: string,
+    options: {label?: string, schedule?: Schedule} = {}
   ) {
     this.validateConstructorInput(startingDate);
     this.startingDate = new Date(startingDate);
+    this.label = options.label;
+    this.setSchedule(options.schedule);
   }
 
-  setSchedule(schedule: Schedule) {
+  setSchedule(schedule: Schedule | null) {
+    if (!schedule) return;
     this.validateSetScheduleInput(schedule);
     this.schedule = schedule;
   }

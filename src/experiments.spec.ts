@@ -16,7 +16,7 @@ describe('RepeatableEvent', () => {
     })
   
     it('constructs with a label', () => {
-      expect(new RepeatableEvent('2001-01-01', 'My Event').label).toEqual('My Event');
+      expect(new RepeatableEvent('2001-01-01', {label: 'My Event'}).label).toEqual('My Event');
     })
   })
 
