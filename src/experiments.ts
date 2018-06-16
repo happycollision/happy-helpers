@@ -18,7 +18,7 @@ export type DateInput = Date | DateTime | string; // ISO Formatted only
 
 export class RepeatableEvent {
   public startingDate: DateTime;
-  public label: string;
+  public label?: string;
   protected schedule: Schedule;
 
   constructor(
@@ -31,7 +31,7 @@ export class RepeatableEvent {
     this.setSchedule(options.schedule);
   }
 
-  setSchedule(schedule: Schedule | null) {
+  setSchedule(schedule: Schedule | undefined) {
     if (!schedule) return;
     this.validateSetScheduleInput(schedule);
     this.schedule = schedule;
@@ -59,30 +59,30 @@ export class RepeatableEvent {
     }
   }
 
-  private validateConstructorInput(startingDate): void {
+  private validateConstructorInput(startingDate: any): void {
     if (startingDate instanceof Date) return;
-    const baseErrorMessage = 'The constructor for RepeatableEvent will only take a string with the format `yyyy-mm-dd`.'
-    let errorMessage: string; 
     if (startingDate instanceof DateTime) return;
     if (typeof startingDate !== 'string') {
       throw new Error('The only valid options when setting a date are native js Date, Luxon DateTime, or a string (ISO format)');
     }
+    const baseErrorMessage = 'When given a string, the only valid format is `yyyy-mm-dd`.'
+    let errors: string[] = [];
     const regex = /([\d]{4})-([\d]{2})-([\d]{2})/
     if (!regex.test(startingDate)) {
       throw new Error(baseErrorMessage)
     }
-    const [_, year, month, day] = startingDate.match(regex).map((part, i) => {
+    const [_, year, month, day] = (startingDate.match(regex) as RegExpMatchArray).map((part, i) => {
       if (i === 0) return part;
       return parseInt(part, 10);
     });
     if (month > 12 || month < 1) {
-      errorMessage = `${errorMessage} The month, which should be 1 through 12, was given as ${month}.`
+      errors.push(`The month, which should be 1 through 12, was given as ${month}.`);
     }
     if (day > 31 || day < 1) {
-      errorMessage = `${errorMessage} The day, which should be 1 through 31, was given as ${day}.`
+      errors.push(`The day, which should be 1 through 31, was given as ${day}.`);
     }
-    if (errorMessage) {
-      throw new Error(`${baseErrorMessage} ${errorMessage}`)
+    if (errors.length > 0) {
+      throw new Error(baseErrorMessage.concat(errors.join(' ')));
     }
   }
 }
