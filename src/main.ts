@@ -103,10 +103,10 @@ export function nestedPropertyDetails (
   let pathParts = propertyPath.split('.');
   let reducedObj = clone(obj);
   let exists = true;
-  let existingPath = [];
+  let existingPath: string[] = [];
   while (exists && pathParts.length > 0) {
     let newPart = pathParts.shift();
-    if (reducedObj[newPart]) {
+    if (newPart && reducedObj[newPart]) {
       existingPath.push(newPart);
       reducedObj = reducedObj[newPart];
     } else {
@@ -186,10 +186,10 @@ export function objectContainsValue (val: any, obj: object): boolean {
 
 export function objectKeyForValue<T extends object, K extends keyof T> (val: any, obj: T): false | K {
   if (!objectContainsValue(val, obj)) return false;
-  return Object.keys(obj).reduce((a, currentKey: K) => {
+  return (Object.keys(obj) as K[]).reduce((a, currentKey: K) => {
     if (obj[currentKey] === val) {a = currentKey;}
     return a;
-  }, '') as K;
+  }, '' as K);
 }
 
 export function forceArray<T> (val: T | T[]): T[] {
@@ -202,8 +202,8 @@ export function forceArray<T> (val: T | T[]): T[] {
 }
 
 const noCircularRefs = () => {
-  const valCache = [];
-  const keyCache = [];
+  const valCache: any[] = [];
+  const keyCache: any[] = [];
   let isFirstRun = true;
 
   return (key, value) => {

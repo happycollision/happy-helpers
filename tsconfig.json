@@ -3,7 +3,7 @@
     "target": "es5",
     "importHelpers": true,
     "moduleResolution": "node",
-    "strict": false,
+    "strictNullChecks": true,
     "noEmitHelpers": true,
     "sourceMap": true,
     "noImplicitAny": false,
