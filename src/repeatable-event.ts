@@ -29,7 +29,7 @@ export class RepeatableEvent {
     date: DateInput,
     options: {label?: string, schedule?: Schedule} = {}
   ) {
-    this.validateConstructorInput(date);
+    this.validateDateInput(date);
     this.setDate(date)
     this.label = options.label;
     this.setSchedule(options.schedule);
@@ -59,7 +59,7 @@ export class RepeatableEvent {
   }
 
   private getDateTimeFromInput(input: DateInput): DateTime {
-    this.validateConstructorInput(input);
+    this.validateDateInput(input);
     if (typeof input === 'string') return DateTime.fromISO(input);
     if (input instanceof Date) return DateTime.fromJSDate(input);
     return input;
@@ -76,7 +76,7 @@ export class RepeatableEvent {
     }
   }
 
-  private validateConstructorInput(date: any): void {
+  private validateDateInput(date: any): void {
     if (date instanceof Date) return;
     if (date instanceof DateTime) return;
     if (typeof date !== 'string') {
