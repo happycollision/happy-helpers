@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
 
+import { objectKeyForValue } from './main';
+
 // See https://basarat.gitbooks.io/typescript/content/docs/types/literal-types.html
 function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
   return o.reduce((res, key) => {
@@ -9,7 +11,9 @@ function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
 }
 
 export const Schedule = strEnum([
+  'yearly',
   'monthly',
+  'daily',
 ]);
 
 export type Schedule = keyof typeof Schedule;
@@ -38,7 +42,16 @@ export class RepeatableEvent {
   }
 
   next() {
-    return {date: this.date.plus({months: 1})}
+    const conversions = {
+      years: Schedule.yearly,
+      months: Schedule.monthly,
+      days: Schedule.daily,
+    }
+    const addObj = {};
+    const addKey = objectKeyForValue(this.schedule, conversions) as string;
+    addObj[addKey] = 1;
+    const newDateTime = this.date.plus(addObj)
+    return new RepeatableEvent(newDateTime, {schedule: this.schedule})
   }
 
   private setDate(date: DateInput) {

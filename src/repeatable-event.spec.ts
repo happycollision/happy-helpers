@@ -1,4 +1,4 @@
-import { RepeatableEvent } from './repeatable-event';
+import { RepeatableEvent, Schedule } from './repeatable-event';
 import { DateTime } from 'luxon';
 
 describe('RepeatableEvent', () => {
@@ -36,10 +36,23 @@ describe('RepeatableEvent', () => {
     let repeatable: RepeatableEvent;
     beforeEach(() => repeatable = new RepeatableEvent('2001-01-01'))
 
-    it('correctly identifies the next date based on the schedule', () => {
+    it('returns a new RepeatableEvent', () => {
       repeatable.setSchedule('monthly');
-      const endDate = DateTime.fromISO('2001-02-01');
-      expect(repeatable.next().date).toEqual(endDate)
+      const next = repeatable.next();
+      expect(next).toBeInstanceOf(RepeatableEvent);
+      expect(next).not.toBe(repeatable);
+    });
+
+    [
+      ['monthly', '2001-02-01'],
+      ['daily', '2001-01-02'],
+      ['yearly', '2002-01-01'],
+    ].forEach(([schedule, dateStr]) => {
+      it(`correctly identifies the next date based on a ${schedule} schedule`, () => {
+        const endDate = DateTime.fromISO(dateStr);
+        repeatable.setSchedule(schedule as Schedule);
+        expect(repeatable.next().date).toEqual(endDate)
+      })
     })
   })
 });
