@@ -20,18 +20,25 @@ export type Schedule = keyof typeof Schedule;
 
 export type DateInput = Date | DateTime | string; // ISO Formatted only
 
+export interface RepeatableEventOptions {
+  label?: string;
+}
+
 export class RepeatableEvent {
   public date: DateTime;
   public label?: string;
   protected schedule: Schedule;
 
+  private originalOptions: RepeatableEventOptions;
+
   constructor(
     date: DateInput,
     schedule: Schedule,
-    options: {label?: string} = {}
+    options: RepeatableEventOptions = {}
   ) {
     this.setDate(date)
     this.setSchedule(schedule);
+    this.originalOptions = options;
     this.label = options.label;
   }
 
@@ -45,7 +52,7 @@ export class RepeatableEvent {
     const addKey = objectKeyForValue(this.schedule, conversions) as string;
     addObj[addKey] = 1;
     const newDateTime = this.date.plus(addObj)
-    return new RepeatableEvent(newDateTime, this.schedule)
+    return new RepeatableEvent(newDateTime, this.schedule, this.originalOptions)
   }
 
   private setSchedule(schedule: Schedule) {

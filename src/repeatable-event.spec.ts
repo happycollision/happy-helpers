@@ -56,5 +56,10 @@ describe('RepeatableEvent', () => {
         expect(repeatable.next().date).toEqual(endDate)
       })
     })
+
+    it('preserves settings on each iteration', () => {
+      expect(createRepeatable({schedule: 'daily', label: 'my label'}).next())
+      .toMatchObject({schedule: 'daily', label: 'my label'})
+    })
   })
 });
