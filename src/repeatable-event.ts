@@ -35,12 +35,7 @@ export class RepeatableEvent {
     this.label = options.label;
   }
 
-  private setSchedule(schedule: Schedule) {
-    this.validateSetScheduleInput(schedule);
-    this.schedule = schedule;
-  }
-
-  next() {
+  public next() {
     const conversions = {
       years: Schedule.yearly,
       months: Schedule.monthly,
@@ -51,6 +46,11 @@ export class RepeatableEvent {
     addObj[addKey] = 1;
     const newDateTime = this.date.plus(addObj)
     return new RepeatableEvent(newDateTime, this.schedule)
+  }
+
+  private setSchedule(schedule: Schedule) {
+    this.validateSetScheduleInput(schedule);
+    this.schedule = schedule;
   }
 
   private setDate(date: DateInput) {
