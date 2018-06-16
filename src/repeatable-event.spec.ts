@@ -1,4 +1,4 @@
-import { RepeatableEvent } from './experiments';
+import { RepeatableEvent } from './repeatable-event';
 import { DateTime } from 'luxon';
 
 describe('RepeatableEvent', () => {
