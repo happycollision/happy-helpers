@@ -37,6 +37,10 @@ export class RepeatableEvent {
     this.schedule = schedule;
   }
 
+  next() {
+    return {date: this.startingDate.plus({months: 1})}
+  }
+
   private setStartingDate(ctorInputDate: DateInput) {
     this.startingDate = this.getDateTimeFromInput(ctorInputDate);
   }

@@ -31,4 +31,15 @@ describe('RepeatableEvent', () => {
       expect(() => repeatable.setSchedule('monthlly')).toThrowError('monthlly');
     })
   })
+
+  describe('next', () => {
+    let repeatable: RepeatableEvent;
+    beforeEach(() => repeatable = new RepeatableEvent('2001-01-01'))
+
+    it('correctly identifies the next date based on the schedule', () => {
+      repeatable.setSchedule('monthly');
+      const endDate = DateTime.fromISO('2001-02-01');
+      expect(repeatable.next().date).toEqual(endDate)
+    })
+  })
 });
