@@ -43,6 +43,10 @@ export class RepeatableEvent {
   }
 
   public next() {
+    return new RepeatableEvent(this.nextDateTime(), this.schedule, this.originalOptions)
+  }
+
+  public nextDateTime() {
     const conversions = {
       years: Schedule.yearly,
       months: Schedule.monthly,
@@ -51,8 +55,7 @@ export class RepeatableEvent {
     const addObj = {};
     const addKey = objectKeyForValue(this.schedule, conversions) as string;
     addObj[addKey] = 1;
-    const newDateTime = this.date.plus(addObj)
-    return new RepeatableEvent(newDateTime, this.schedule, this.originalOptions)
+    return this.date.plus(addObj);
   }
 
   public clone() {

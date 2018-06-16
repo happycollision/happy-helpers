@@ -68,4 +68,20 @@ describe('RepeatableEvent', () => {
       expect(createRepeatable().clone()).toMatchObject(createRepeatable())
     })
   })
+
+  describe('nextDateTime', () => {
+    [
+      ['monthly', '2001-02-01'],
+      ['daily', '2001-01-02'],
+      ['yearly', '2002-01-01'],
+    ].forEach(([schedule, dateStr]) => {
+      it(`returns a DateTime correctly for the ${schedule} schedule`, () => {
+        const repeatable = createRepeatable({ date: '2001-01-01', schedule: schedule as Schedule });
+        const endDate = DateTime.fromISO(dateStr);
+        expect(repeatable.nextDateTime()).toEqual(endDate)
+      })
+    })
+  })
+
+
 });
