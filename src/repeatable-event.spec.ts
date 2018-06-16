@@ -94,4 +94,13 @@ describe('RepeatableEvent', () => {
       expect(() => repeatable.numRepeatsUntil('2000-01-01')).toThrow();
     })
   })
+
+  describe('isIterationOf', () => {
+    it('returns true if it is a descendent of another RepeatableEvent', () => {
+      const first = createRepeatable();
+      const second = first.next();
+      expect(second.isIterationOf(first)).toEqual(true);
+      expect(second.next().isIterationOf(first)).toEqual(true);
+    })
+  })
 });

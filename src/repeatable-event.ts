@@ -28,7 +28,8 @@ export class RepeatableEvent {
   public date: DateTime;
   public label?: string;
   protected schedule: Schedule;
-
+  
+  private ancestors: RepeatableEvent[] = [];
   private originalOptions: RepeatableEventOptions;
 
   constructor(
@@ -43,7 +44,9 @@ export class RepeatableEvent {
   }
 
   public next() {
-    return new RepeatableEvent(this.nextDateTime(), this.schedule, this.originalOptions)
+    const next = new RepeatableEvent(this.nextDateTime(), this.schedule, this.originalOptions);
+    next.ancestors = next.ancestors.concat(this.ancestors, this);
+    return next;
   }
 
   public nextDateTime(): DateTime {
@@ -67,6 +70,10 @@ export class RepeatableEvent {
 
   public clone() {
     return new RepeatableEvent(this.date, this.schedule, this.originalOptions)
+  }
+
+  public isIterationOf(original: RepeatableEvent) {
+    return this.ancestors.indexOf(original) > -1;
   }
 
   private getDateTimeIterator() {
