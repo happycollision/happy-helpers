@@ -62,4 +62,10 @@ describe('RepeatableEvent', () => {
       .toMatchObject({schedule: 'daily', label: 'my label'})
     })
   })
+
+  describe('clone', () => {
+    it('preserves everything', () => {
+      expect(createRepeatable().clone()).toMatchObject(createRepeatable())
+    })
+  })
 });

@@ -55,6 +55,10 @@ export class RepeatableEvent {
     return new RepeatableEvent(newDateTime, this.schedule, this.originalOptions)
   }
 
+  public clone() {
+    return new RepeatableEvent(this.date, this.schedule, this.originalOptions)
+  }
+
   private setSchedule(schedule: Schedule) {
     this.validateSetScheduleInput(schedule);
     this.schedule = schedule;
