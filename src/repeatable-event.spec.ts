@@ -102,5 +102,12 @@ describe('RepeatableEvent', () => {
       expect(second.isIterationOf(first)).toEqual(true);
       expect(second.next().isIterationOf(first)).toEqual(true);
     })
+
+    it('returns true even on a cloned instance', () => {
+      const first = createRepeatable();
+      const second = first.next().clone();
+      expect(second.isIterationOf(first)).toEqual(true);
+      expect(second.next().isIterationOf(first)).toEqual(true);
+    })
   })
 });

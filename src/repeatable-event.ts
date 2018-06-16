@@ -69,7 +69,9 @@ export class RepeatableEvent {
   }
 
   public clone() {
-    return new RepeatableEvent(this.date, this.schedule, this.originalOptions)
+    const clone = new RepeatableEvent(this.date, this.schedule, this.originalOptions);
+    clone.ancestors = this.ancestors;
+    return clone;
   }
 
   public isIterationOf(original: RepeatableEvent) {
