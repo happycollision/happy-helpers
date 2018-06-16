@@ -50,6 +50,18 @@ export class RepeatableEvent {
     return this.getAdder()();
   }
 
+  public numRepeatsUntil(date: DateInput) {
+    const endingDate = this.getDateTimeFromInput(date);
+    const adder = this.getAdder();
+    let currentDate = this.date;
+    let times = 0;
+    while (currentDate.toJSDate() < endingDate.toJSDate()) {
+      times++;
+      currentDate = adder(currentDate);
+    }
+    return times;
+  }
+
   public clone() {
     return new RepeatableEvent(this.date, this.schedule, this.originalOptions)
   }

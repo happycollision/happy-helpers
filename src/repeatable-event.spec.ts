@@ -83,5 +83,11 @@ describe('RepeatableEvent', () => {
     })
   })
 
+  describe('numRepeatsUntil', () => {
+    it('returns the number of complete repeats until a given date', () => {
+      const repeatable = createRepeatable({date: '2001-01-01', schedule: 'daily'});
+      expect(repeatable.numRepeatsUntil('2001-01-03')).toEqual(2);
+    })
 
+  })
 });
