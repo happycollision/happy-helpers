@@ -17,16 +17,16 @@ export type Schedule = keyof typeof Schedule;
 export type DateInput = Date | DateTime | string; // ISO Formatted only
 
 export class RepeatableEvent {
-  public startingDate: DateTime;
+  public date: DateTime;
   public label?: string;
   protected schedule: Schedule;
 
   constructor(
-    startingDate: DateInput,
+    date: DateInput,
     options: {label?: string, schedule?: Schedule} = {}
   ) {
-    this.validateConstructorInput(startingDate);
-    this.setStartingDate(startingDate)
+    this.validateConstructorInput(date);
+    this.setDate(date)
     this.label = options.label;
     this.setSchedule(options.schedule);
   }
@@ -38,11 +38,11 @@ export class RepeatableEvent {
   }
 
   next() {
-    return {date: this.startingDate.plus({months: 1})}
+    return {date: this.date.plus({months: 1})}
   }
 
-  private setStartingDate(ctorInputDate: DateInput) {
-    this.startingDate = this.getDateTimeFromInput(ctorInputDate);
+  private setDate(date: DateInput) {
+    this.date = this.getDateTimeFromInput(date);
   }
 
   private getDateTimeFromInput(input: DateInput): DateTime {
@@ -63,19 +63,19 @@ export class RepeatableEvent {
     }
   }
 
-  private validateConstructorInput(startingDate: any): void {
-    if (startingDate instanceof Date) return;
-    if (startingDate instanceof DateTime) return;
-    if (typeof startingDate !== 'string') {
+  private validateConstructorInput(date: any): void {
+    if (date instanceof Date) return;
+    if (date instanceof DateTime) return;
+    if (typeof date !== 'string') {
       throw new Error('The only valid options when setting a date are native js Date, Luxon DateTime, or a string (ISO format)');
     }
     const baseErrorMessage = 'When given a string, the only valid format is `yyyy-mm-dd`.'
     let errors: string[] = [];
     const regex = /([\d]{4})-([\d]{2})-([\d]{2})/
-    if (!regex.test(startingDate)) {
+    if (!regex.test(date)) {
       throw new Error(baseErrorMessage)
     }
-    const [_, year, month, day] = (startingDate.match(regex) as RegExpMatchArray).map((part, i) => {
+    const [_, year, month, day] = (date.match(regex) as RegExpMatchArray).map((part, i) => {
       if (i === 0) return part;
       return parseInt(part, 10);
     });
