@@ -1,9 +1,10 @@
 import { RepeatableEvent } from './experiments';
+import { DateTime } from 'luxon';
 
 describe('RepeatableEvent', () => {
   describe('instantiation', () => {
     it('constructs with a starting date string', () => {
-      expect(new RepeatableEvent('2001-01-01').startingDate).toEqual(new Date('2001-01-01'))
+      expect(new RepeatableEvent('2001-01-01').startingDate).toEqual(DateTime.fromISO('2001-01-01'))
     })
   
     it('disallows strings other than yyyy-mm-dd', () => {

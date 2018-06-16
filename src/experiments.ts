@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 // See https://basarat.gitbooks.io/typescript/content/docs/types/literal-types.html
 function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
   return o.reduce((res, key) => {
@@ -12,17 +14,19 @@ export const Schedule = strEnum([
 
 export type Schedule = keyof typeof Schedule;
 
+export type DateInput = Date | DateTime | string; // ISO Formatted only
+
 export class RepeatableEvent {
-  public startingDate: Date;
+  public startingDate: DateTime;
   public label: string;
   protected schedule: Schedule;
 
   constructor(
-    startingDate: string | Date,
+    startingDate: DateInput,
     options: {label?: string, schedule?: Schedule} = {}
   ) {
     this.validateConstructorInput(startingDate);
-    this.startingDate = new Date(startingDate);
+    this.setStartingDate(startingDate)
     this.label = options.label;
     this.setSchedule(options.schedule);
   }
@@ -31,6 +35,17 @@ export class RepeatableEvent {
     if (!schedule) return;
     this.validateSetScheduleInput(schedule);
     this.schedule = schedule;
+  }
+
+  private setStartingDate(ctorInputDate: DateInput) {
+    this.startingDate = this.getDateTimeFromInput(ctorInputDate);
+  }
+
+  private getDateTimeFromInput(input: DateInput): DateTime {
+    this.validateConstructorInput(input);
+    if (typeof input === 'string') return DateTime.fromISO(input);
+    if (input instanceof Date) return DateTime.fromJSDate(input);
+    return input;
   }
 
   private validateSetScheduleInput(schedule: Schedule) {
@@ -48,6 +63,10 @@ export class RepeatableEvent {
     if (startingDate instanceof Date) return;
     const baseErrorMessage = 'The constructor for RepeatableEvent will only take a string with the format `yyyy-mm-dd`.'
     let errorMessage: string; 
+    if (startingDate instanceof DateTime) return;
+    if (typeof startingDate !== 'string') {
+      throw new Error('The only valid options when setting a date are native js Date, Luxon DateTime, or a string (ISO format)');
+    }
     const regex = /([\d]{4})-([\d]{2})-([\d]{2})/
     if (!regex.test(startingDate)) {
       throw new Error(baseErrorMessage)

@@ -36,11 +36,15 @@
   },
   "devDependencies": {
     "@types/jest": "^22.2.2",
+    "@types/luxon": "^0.5.3",
     "@types/node": "^9.6.4",
     "jest": "^22.4.3",
     "ts-jest": "^22.4.2",
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1"
+  },
+  "dependencies": {
+    "luxon": "^1.2.1"
   }
 }
