@@ -46,18 +46,18 @@ export class RepeatableEvent {
     return new RepeatableEvent(this.nextDateTime(), this.schedule, this.originalOptions)
   }
 
-  public nextDateTime() {
-    return this.getAdder()();
+  public nextDateTime(): DateTime {
+    return this.getDateTimeIterator().next().value;
   }
 
   public numRepeatsUntil(date: DateInput) {
     const endingDate = this.getDateTimeFromInput(date);
-    const adder = this.getAdder();
+    const adder = this.getDateTimeIterator();
     let currentDate = this.date;
     let times = 0;
     while (currentDate.toJSDate() < endingDate.toJSDate()) {
       times++;
-      currentDate = adder(currentDate);
+      currentDate = adder.next().value;
     }
     return times;
   }
@@ -66,7 +66,7 @@ export class RepeatableEvent {
     return new RepeatableEvent(this.date, this.schedule, this.originalOptions)
   }
 
-  private getAdder() {
+  private getDateTimeIterator() {
     const conversions = {
       years: Schedule.yearly,
       months: Schedule.monthly,
@@ -75,9 +75,12 @@ export class RepeatableEvent {
     const addObj = {};
     const addKey = objectKeyForValue(this.schedule, conversions) as string;
     addObj[addKey] = 1;
-    return (date?: DateTime) => {
-      return date ? date.plus(addObj) : this.date.plus(addObj)
-    };
+    let date = this.date;
+    return (function* () {
+      while (true) {
+        yield date = date.plus(addObj);
+      }
+    })();
   }
 
   private setSchedule(schedule: Schedule) {
