@@ -27,16 +27,15 @@ export class RepeatableEvent {
 
   constructor(
     date: DateInput,
-    options: {label?: string, schedule?: Schedule} = {}
+    schedule: Schedule,
+    options: {label?: string} = {}
   ) {
-    this.validateDateInput(date);
     this.setDate(date)
+    this.setSchedule(schedule);
     this.label = options.label;
-    this.setSchedule(options.schedule);
   }
 
-  setSchedule(schedule: Schedule | undefined) {
-    if (!schedule) return;
+  private setSchedule(schedule: Schedule) {
     this.validateSetScheduleInput(schedule);
     this.schedule = schedule;
   }
@@ -51,10 +50,11 @@ export class RepeatableEvent {
     const addKey = objectKeyForValue(this.schedule, conversions) as string;
     addObj[addKey] = 1;
     const newDateTime = this.date.plus(addObj)
-    return new RepeatableEvent(newDateTime, {schedule: this.schedule})
+    return new RepeatableEvent(newDateTime, this.schedule)
   }
 
   private setDate(date: DateInput) {
+    this.validateDateInput(date);
     this.date = this.getDateTimeFromInput(date);
   }
 
