@@ -55,10 +55,10 @@ export class RepeatableEvent {
     const adder = this.getDateTimeIterator();
     let currentDate = this.date;
     let times = 0;
-    if (currentDate.toJSDate() > endingDate.toJSDate()) {
+    if (currentDate > endingDate) {
       throw new Error('The date given was before the current date')
     }
-    while (currentDate.toJSDate() < endingDate.toJSDate()) {
+    while (currentDate < endingDate) {
       times++;
       currentDate = adder.next().value;
     }
