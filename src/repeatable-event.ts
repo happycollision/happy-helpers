@@ -53,17 +53,20 @@ export class RepeatableEvent {
     return this.getDateTimeIterator().next().value;
   }
 
-  public numRepeatsUntil(date: DateInput) {
+  public numRepeatsUntil(date: DateInput): number {
     const endingDate = this.getDateTimeFromInput(date);
-    const adder = this.getDateTimeIterator();
-    let currentDate = this.date;
+    const iterator = this.getDateTimeIterator(endingDate);
     let times = 0;
-    if (currentDate > endingDate) {
-      throw new Error('The date given was before the current date')
-    }
-    while (currentDate < endingDate) {
+    let firstIteration = iterator.next();
+    if (firstIteration.value > endingDate) {
+      return times;
+    } else {
       times++;
-      currentDate = adder.next().value;
+    }
+    let done = firstIteration.done;
+    while (!done) {
+      done = iterator.next().done;
+      times++;
     }
     return times;
   }
@@ -79,7 +82,10 @@ export class RepeatableEvent {
     return this.ancestors.indexOf(original) > -1;
   }
 
-  private getDateTimeIterator() {
+  private getDateTimeIterator(endingDate?: DateTime): IterableIterator<DateTime> {
+    if (endingDate && this.date > endingDate) {
+      throw new Error('The date given was before the current date')
+    }
     const conversions = {
       years: Schedule.yearly,
       months: Schedule.monthly,
@@ -91,7 +97,12 @@ export class RepeatableEvent {
     let date = this.date;
     return (function* () {
       while (true) {
-        yield date = date.plus(addObj);
+        date = date.plus(addObj);
+        if (endingDate && date.plus(addObj) > endingDate) {
+          return date;
+        } else {
+          yield date;
+        }
       }
     })();
   }
