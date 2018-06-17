@@ -115,5 +115,10 @@ describe('RepeatableEvent', () => {
       const second = createRepeatable().next();
       expect(second.isIterationOf(first)).toEqual(false);
     })
+
+    it('throws when a non-repeatable is given to the method', () => {
+      // @ts-ignore
+      expect(() => createRepeatable().isIterationOf({})).toThrow()
+    })
   })
 });

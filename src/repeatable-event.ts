@@ -75,6 +75,7 @@ export class RepeatableEvent {
   }
 
   public isIterationOf(original: RepeatableEvent) {
+    this.validateIsRepeatable(original);
     return this.ancestors.indexOf(original) > -1;
   }
 
@@ -110,6 +111,12 @@ export class RepeatableEvent {
     if (typeof input === 'string') return DateTime.fromISO(input);
     if (input instanceof Date) return DateTime.fromJSDate(input);
     return input;
+  }
+
+  private validateIsRepeatable(repeatable: RepeatableEvent) {
+    if (!(repeatable instanceof RepeatableEvent)) {
+      throw new Error('The argument given is not a RepeatableEvent')
+    }
   }
 
   private validateSetScheduleInput(schedule: Schedule) {
