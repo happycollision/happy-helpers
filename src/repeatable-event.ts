@@ -55,15 +55,12 @@ export class RepeatableEvent {
 
   public numRepeatsUntil(date: DateInput): number {
     const endingDate = this.getDateTimeFromInput(date);
-    const iterator = this.getDateTimeIterator(endingDate);
     let times = 0;
-    let firstIteration = iterator.next();
-    if (firstIteration.value > endingDate) {
+    if (this.cannotRepeatBeforeEndingDate(endingDate)) {
       return times;
-    } else {
-      times++;
     }
-    let done = firstIteration.done;
+    const iterator = this.getDateTimeIterator(endingDate);
+    let done = false;
     while (!done) {
       done = iterator.next().done;
       times++;
@@ -80,6 +77,15 @@ export class RepeatableEvent {
   public isIterationOf(original: RepeatableEvent) {
     this.validateIsRepeatable(original);
     return this.ancestors.indexOf(original) > -1;
+  }
+
+  private canRepeatBeforeEndingDate(endingDate: DateTime): boolean {
+    const iterator = this.getDateTimeIterator(endingDate);
+    return iterator.next().value <= endingDate;
+  }
+
+  private cannotRepeatBeforeEndingDate(endingDate: DateTime): boolean {
+    return !this.canRepeatBeforeEndingDate(endingDate);
   }
 
   private getDateTimeIterator(endingDate?: DateTime): IterableIterator<DateTime> {
