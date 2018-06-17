@@ -24,6 +24,8 @@ export interface RepeatableEventOptions {
   label?: string;
 }
 
+export type OnRepeatFunction = (input: {from: RepeatableEvent, to: RepeatableEvent}) => void;
+
 export class RepeatableEvent {
   public date: DateTime;
   public label?: string;
@@ -31,6 +33,7 @@ export class RepeatableEvent {
   
   private ancestors: RepeatableEvent[] = [];
   private originalOptions: RepeatableEventOptions;
+  private onRepeatFunctions: OnRepeatFunction[] = [];
 
   constructor(
     date: DateInput,
@@ -46,6 +49,8 @@ export class RepeatableEvent {
   public next() {
     const next = new RepeatableEvent(this.nextDateTime(), this.schedule, this.originalOptions);
     next.ancestors = next.ancestors.concat(this.ancestors, this);
+    next.onRepeatFunctions = this.onRepeatFunctions;
+    this.onRepeatFunctions.forEach(func => func({from: this, to: next}));
     return next;
   }
 
@@ -82,6 +87,10 @@ export class RepeatableEvent {
       complete = done;
     }
     return repeats;
+  }
+
+  public onRepeat(fn: OnRepeatFunction) {
+    this.onRepeatFunctions.push(fn);
   }
 
   public clone() {

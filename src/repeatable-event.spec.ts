@@ -118,6 +118,42 @@ describe('RepeatableEvent', () => {
     })
   })
 
+  describe('`onRepeat` side effects', () => {
+    it('can register a function that is called on `next()`', () => {
+      const mock = jest.fn();
+      const parent = createRepeatable();
+      parent.onRepeat(mock);
+      const child = parent.next();
+      expect(mock).toHaveBeenCalledWith({ from: parent, to: child });
+    })
+
+    it('registered function is called on *every* `next()`', () => {
+      const mock = jest.fn();
+      const parent = createRepeatable();
+      parent.onRepeat(mock);
+      const child = parent.next();
+      const grandchild = child.next();
+      expect(mock).toHaveBeenCalledTimes(2);
+      expect(mock).toHaveBeenCalledWith({ from: parent, to: child });
+      expect(mock).toHaveBeenCalledWith({ from: child, to: grandchild });
+    })
+
+    it('allows functions to be added at any level', () => {
+      const mock1 = jest.fn();
+      const mock2 = jest.fn();
+      const parent = createRepeatable();
+      parent.onRepeat(mock1);
+      const child = parent.next();
+      child.onRepeat(mock2);
+      const grandchild = child.next();
+      expect(mock1).toHaveBeenCalledTimes(2);
+      expect(mock2).toHaveBeenCalledTimes(1);
+      expect(mock1).toHaveBeenCalledWith({ from: parent, to: child });
+      expect(mock1).toHaveBeenCalledWith({ from: child, to: grandchild });
+      expect(mock2).toHaveBeenCalledWith({ from: child, to: grandchild });
+    })
+  })
+
   describe('isIterationOf', () => {
     it('returns true if it is a descendent of another RepeatableEvent', () => {
       const first = createRepeatable();
