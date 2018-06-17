@@ -109,5 +109,11 @@ describe('RepeatableEvent', () => {
       expect(second.isIterationOf(first)).toEqual(true);
       expect(second.next().isIterationOf(first)).toEqual(true);
     })
+
+    it('returns false for a repeatable that is not an ancestor', () => {
+      const first = createRepeatable();
+      const second = createRepeatable().next();
+      expect(second.isIterationOf(first)).toEqual(false);
+    })
   })
 });
