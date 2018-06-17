@@ -103,6 +103,21 @@ describe('RepeatableEvent', () => {
     })
   })
 
+  describe('repeatUntil', () => {
+    it('returns Repeatables with the correct dates', () => {
+      const repeatable = createRepeatable({ date: '2001-01-01', schedule: 'daily' });
+      const repeats = repeatable.repeatUntil('2001-01-05');
+      const expectedDates = ['2001-01-02', '2001-01-03', '2001-01-04', '2001-01-05'].map(x => DateTime.fromISO(x))
+      expect(repeats.map(x => x instanceof RepeatableEvent)).toEqual([true, true, true, true]);
+      expect(repeats.map(x => x.date)).toEqual(expectedDates);
+    })
+
+    it('throws if date given is before the date of the repeatable', () => {
+      const repeatable = createRepeatable({ date: '2001-01-01', schedule: 'daily' });
+      expect(() => repeatable.numRepeatsUntil('2000-01-01')).toThrow();
+    })
+  })
+
   describe('isIterationOf', () => {
     it('returns true if it is a descendent of another RepeatableEvent', () => {
       const first = createRepeatable();

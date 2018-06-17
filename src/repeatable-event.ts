@@ -68,6 +68,22 @@ export class RepeatableEvent {
     return times;
   }
 
+  public repeatUntil(date: DateInput): RepeatableEvent[] {
+    const repeats: RepeatableEvent[] = [];
+    const endingDate = this.getDateTimeFromInput(date);
+    if (this.cannotRepeatBeforeEndingDate(endingDate)) {
+      return repeats;
+    }
+    let complete = false;
+    const repeater = this.getRepeater(endingDate);
+    while (!complete) {
+      let {value, done} = repeater.next();
+      repeats.push(value);
+      complete = done;
+    }
+    return repeats;
+  }
+
   public clone() {
     const clone = new RepeatableEvent(this.date, this.schedule, this.originalOptions);
     clone.ancestors = this.ancestors;
@@ -86,6 +102,21 @@ export class RepeatableEvent {
 
   private cannotRepeatBeforeEndingDate(endingDate: DateTime): boolean {
     return !this.canRepeatBeforeEndingDate(endingDate);
+  }
+
+  private getRepeater(endingDate?: DateTime): IterableIterator<RepeatableEvent> {
+    const iterator = this.getDateTimeIterator(endingDate);
+    let currentRepeatingEvent: RepeatableEvent = this;
+    return (function* () {
+      while (true) {
+        if (iterator.next().done) {
+          return currentRepeatingEvent.next();
+        } else {
+          currentRepeatingEvent = currentRepeatingEvent.next();
+          yield currentRepeatingEvent;
+        }
+      }
+    })()
   }
 
   private getDateTimeIterator(endingDate?: DateTime): IterableIterator<DateTime> {
