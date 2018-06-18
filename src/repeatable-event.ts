@@ -49,7 +49,7 @@ export class RepeatableEvent {
   public next() {
     const next = new RepeatableEvent(this.nextDateTime(), this.schedule, this.originalOptions);
     next.ancestors = next.ancestors.concat(this.ancestors, this);
-    next.onRepeatFunctions = this.onRepeatFunctions;
+    next.onRepeatFunctions = next.onRepeatFunctions.concat(this.onRepeatFunctions);
     this.onRepeatFunctions.forEach(func => func({from: this, to: next}));
     return next;
   }
@@ -91,6 +91,15 @@ export class RepeatableEvent {
 
   public onRepeat(fn: OnRepeatFunction) {
     this.onRepeatFunctions.push(fn);
+  }
+
+  public offRepeat(fn: OnRepeatFunction) {
+    const index = this.onRepeatFunctions.indexOf(fn);
+    if (index > -1) {
+      this.onRepeatFunctions.splice(index, 1);
+    } else {
+      throw new Error('The given function was not registered, therefore could not be unregistered.')
+    }
   }
 
   public clone() {

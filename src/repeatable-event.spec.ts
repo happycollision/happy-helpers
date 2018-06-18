@@ -152,6 +152,37 @@ describe('RepeatableEvent', () => {
       expect(mock1).toHaveBeenCalledWith({ from: child, to: grandchild });
       expect(mock2).toHaveBeenCalledWith({ from: child, to: grandchild });
     })
+
+    it('can deregister functions at any level', () => {
+      const mock1 = jest.fn();
+      const mock2 = jest.fn();
+      const parent = createRepeatable();
+      parent.onRepeat(mock1);
+      const child = parent.next();
+      child.onRepeat(mock2);
+      child.offRepeat(mock1);
+      const grandchild = child.next();
+      expect(mock1).toHaveBeenCalledTimes(1);
+      expect(mock2).toHaveBeenCalledTimes(1);
+      expect(mock1).toHaveBeenCalledWith({ from: parent, to: child });
+      expect(mock2).toHaveBeenCalledWith({ from: child, to: grandchild });
+    })
+
+    it('deregistration does not affect siblings', () => {
+      const mock1 = jest.fn();
+      const parent = createRepeatable();
+      parent.onRepeat(mock1);
+      const child = parent.next();
+      const sibling = parent.next();
+      child.offRepeat(mock1);
+      const grandchild = child.next();
+      const grandchild2 = sibling.next();
+      expect(mock1).toHaveBeenCalledTimes(3);
+      expect(mock1).toHaveBeenCalledWith({ from: parent, to: child });
+      expect(mock1).toHaveBeenCalledWith({ from: parent, to: sibling });
+      expect(mock1).toHaveBeenCalledWith({ from: sibling, to: grandchild2 });
+      expect(mock1).not.toHaveBeenCalledWith({ from: child, to: grandchild });
+    })
   })
 
   describe('isIterationOf', () => {
