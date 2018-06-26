@@ -5,6 +5,7 @@ I have found tons of use for all these functions. If I don't ever find time to d
 # Changelog
 
 ## 1.3.0-pre
+* adds `deepEqual` function
 * adds `sort` option to stringify
 
 ### 1.2.2

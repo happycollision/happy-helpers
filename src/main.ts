@@ -256,6 +256,14 @@ function finalStringification(obj, tabLength: number,  stripQuotes: boolean): st
   return str;
 }
 
+/**
+ * Returns true if the deep values of an object are equal.
+ */
+export function deepEqual(objA, objB): boolean {
+  const stringifyOptions = {sort: true};
+  return stringify(objA, stringifyOptions) === stringify(objB, stringifyOptions);
+}
+
 /*
   The following are not tested with `npm test` and are unreliable for certain situations.
   see http://stackoverflow.com/a/8876069

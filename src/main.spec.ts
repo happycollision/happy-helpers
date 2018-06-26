@@ -304,3 +304,79 @@ describe('forceArray', () => {
     });
   });
 });
+
+describe('deepEqual', () => {
+  const deepEqual = hf.deepEqual;
+
+  it('returns true for the same object', () => {
+    const obj = { one: 1 }
+    expect(deepEqual(obj, obj)).toEqual(true);
+  })
+
+  it('returns true for objects that look the same', () => {
+    const obj1 = { one: 1, two: 2, nesting: { nested: { deep: true } } }
+    const obj2 = { one: 1, two: 2, nesting: { nested: { deep: true } } }
+    expect(deepEqual(obj1, obj2)).toEqual(true);
+  })
+
+  it('returns true for objects that look the same, with keys in a different order', () => {
+    const obj1 = { one: 1, two: 2, nesting: { nested: { deep: true } } }
+    const obj2 = { two: 2, one: 1, nesting: { nested: { deep: true } } }
+    expect(deepEqual(obj1, obj2)).toEqual(true);
+  })
+
+  it('returns true for objects that look the same, with circular values', () => {
+    class Circ {
+      me: any;
+      constructor(public value: any) {
+        this.me = this
+      }
+    }
+    const obj1 = new Circ('some string');
+    const obj2 = new Circ('some string');
+    
+    expect(deepEqual(obj1, obj2)).toEqual(true);
+  })
+
+  it('returns true for objects with different circular values which look the same', () => {
+    class Circ {
+      circularProp: any;
+      constructor(value?: any) {
+        this.circularProp = value || this
+      }
+    }
+    const obj1 = new Circ();
+    const obj2 = new Circ();
+    const obj3 = new Circ(obj1);
+    const obj4 = new Circ(obj2);
+    
+    expect(deepEqual(obj3, obj4)).toEqual(true);
+  })
+
+  it('returns true for objects with different circular values which look the same, but where one is self referencing', () => {
+    class Circ {
+      circularProp: any;
+      constructor(value?: any) {
+        this.circularProp = value || this
+      }
+    }
+    const obj1 = new Circ();
+    const obj2 = new Circ(obj1);
+
+    expect(deepEqual(obj1, obj2)).toEqual(true);
+  })
+
+  it('returns false for objects with different 1st level values', () => {
+    const obj1 = { one: 1 }
+    const obj2 = { one: "1" }
+    expect(deepEqual(obj1, obj2)).toEqual(false);
+  })
+
+  it('returns false for objects with different nested values', () => {
+    const obj1 = { one: 1, two: {nested: true} }
+    const obj2 = { one: 1, two: {nested: false} }
+    expect(deepEqual(obj1, obj2)).toEqual(false);
+  })
+
+
+})
