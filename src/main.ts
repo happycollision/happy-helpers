@@ -101,14 +101,14 @@ export function nestedPropertyDetails (
   finalValidProperty: any,
 } {
   let pathParts = propertyPath.split('.');
-  let reducedObj = clone(obj);
+  let currentObject = obj;
   let exists = true;
   let existingPath: string[] = [];
   while (exists && pathParts.length > 0) {
     let newPart = pathParts.shift();
-    if (newPart && reducedObj[newPart]) {
+    if (newPart && currentObject[newPart]) {
       existingPath.push(newPart);
-      reducedObj = reducedObj[newPart];
+      currentObject = currentObject[newPart];
     } else {
       exists = false;
     }
@@ -116,7 +116,7 @@ export function nestedPropertyDetails (
   return {
     exists,
     existingPath: existingPath.join('.'),
-    finalValidProperty: reducedObj,
+    finalValidProperty: currentObject,
   };
 }
 

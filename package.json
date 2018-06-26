@@ -1,7 +1,7 @@
 {
   "name": "happy-helpers",
   "private": false,
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Some helpful javascript functions",
   "main": "lib/main.js",
   "types": "lib/main.d.ts",

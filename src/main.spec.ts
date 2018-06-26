@@ -77,6 +77,20 @@ describe('nestedPropertyDetails', () => {
     let obj = {level1: {level2: 'I am here'}};
     expect(nestedPropertyDetails(obj, 'level1.level2.level3.level4').finalValidProperty).toEqual('I am here');
   });
+  it('does not alter the original object', () => {
+    let obj = {level1: {level2: 'I am here'}};
+    const preserved = hf.clone(obj);
+
+    nestedPropertyDetails(obj, 'level1.level2.level3.level4')
+
+    expect(obj).toEqual(preserved);
+  });
+  it('can traverse circular objects', () => {
+    let obj = {level1: {level2: 'I am here'}} as any;
+    obj.level1.original = obj;
+
+    expect(nestedPropertyDetails(obj, 'level1.original.level1.original').finalValidProperty).toEqual(obj);
+  });
 });
 
 describe('nestedPropertyExists', () => {

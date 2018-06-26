@@ -4,6 +4,9 @@ I have found tons of use for all these functions. If I don't ever find time to d
 
 # Changelog
 
+### 1.2.2
+* `nestedPropertyDetails` now properly handles circular objects
+
 ### 1.2.1
 * update package to export types properly
 
