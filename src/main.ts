@@ -225,12 +225,19 @@ const noCircularRefs = () => {
   };
 };
 
-export function stringify (obj, options = {}): string {
-  const {tabLength, stripQuotes, sort} = Object.assign({
+export interface IStringifyOptions {
+  tabLength: number;
+  stripQuotes: boolean;
+  sort: boolean;
+}
+export function stringify (obj, options: Partial<IStringifyOptions> = {}): string {
+  const defaults: IStringifyOptions = {
     tabLength: 2,
     stripQuotes: false,
     sort: false,
-  }, options);
+  };
+  const settings: IStringifyOptions = Object.assign({}, defaults, options);
+  const {tabLength, stripQuotes, sort} = settings;
   if (sort) {
     if (toType(obj) === 'array') {
       const newObj = (obj as any[]).sort();

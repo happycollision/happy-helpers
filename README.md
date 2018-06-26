@@ -7,6 +7,7 @@ I have found tons of use for all these functions. If I don't ever find time to d
 ## 1.3.0-pre
 * adds `deepEqual` function
 * adds `sort` option to stringify
+* adds type definition to `stringify`'s options
 
 ### 1.2.2
 * `nestedPropertyDetails` now properly handles circular objects
