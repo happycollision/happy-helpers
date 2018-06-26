@@ -18,5 +18,8 @@
             "severity": "off"
         }
     },
+    "linterOptions": {
+        "exclude": ["**/*.spec.ts"]
+    },
     "rulesDirectory": []
 }
