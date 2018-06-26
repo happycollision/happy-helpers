@@ -178,6 +178,7 @@ describe('objectKeyForValue', () => {
 
 describe('stringify', () => {
   let stringify = hf.stringify;
+  
   it('returns a pretty string for an object', () => {
     const obj = {name: 'Stanley', demeanor: 'angry'}
     expect(stringify(obj)).toEqual(
@@ -187,6 +188,17 @@ describe('stringify', () => {
       '}'
     );
   });
+
+  it('optionally sorts the object', () => {
+    const obj = {name: 'Stanley', demeanor: 'angry'}
+    expect(stringify(obj, {sort: true})).toEqual(
+      '{'                        + '\n' +
+      '  "demeanor": "angry",'    + '\n' +
+      '  "name": "Stanley"'     + '\n' +
+      '}'
+    );
+  });
+
   it('returns a pretty string with your desired tab length', () => {
     const obj = {name: 'Stanley', demeanor: 'angry'}
     expect(stringify(obj, {tabLength: 4})).toEqual(
@@ -196,6 +208,7 @@ describe('stringify', () => {
       '}'
     );
   });
+
   it('strips unnecessary quotes', () => {
     const obj = {name: 'Stanley', demeanor: 'angry'}
     expect(stringify(obj, {stripQuotes: true})).toEqual(
@@ -205,6 +218,7 @@ describe('stringify', () => {
       '}'
     );
   });
+
   it('handles circular references gracefully', () => {
     class Circ {
       me: any;

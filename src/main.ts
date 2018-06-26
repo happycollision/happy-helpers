@@ -226,7 +226,29 @@ const noCircularRefs = () => {
 };
 
 export function stringify (obj, options = {}): string {
-  const {tabLength, stripQuotes} = Object.assign({tabLength: 2, stripQuotes: false}, options);
+  const {tabLength, stripQuotes, sort} = Object.assign({
+    tabLength: 2,
+    stripQuotes: false,
+    sort: false,
+  }, options);
+  if (sort) {
+    if (toType(obj) === 'array') {
+      const newObj = (obj as any[]).sort();
+      return finalStringification(newObj, tabLength, stripQuotes);
+    } else if (toType(obj) === 'object') {
+      const newObj = {};
+      const keys = Object.keys(obj).sort();
+      keys.forEach(key => {
+        newObj[key] = obj[key];
+      });
+      return finalStringification(newObj, tabLength, stripQuotes);
+    }
+    return finalStringification(obj, tabLength, stripQuotes);
+  }
+  return finalStringification(obj, tabLength, stripQuotes);
+}
+
+function finalStringification(obj, tabLength: number,  stripQuotes: boolean): string {
   let str = JSON.stringify(obj, noCircularRefs(), tabLength);
   if (stripQuotes) {
     str = str.replace(/"(.*?)": /g, '$1: ');
