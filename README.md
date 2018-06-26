@@ -4,7 +4,7 @@ I have found tons of use for all these functions. If I don't ever find time to d
 
 # Changelog
 
-## 1.3.0-pre
+## 1.3.0
 * adds `deepEqual` function
 * adds `sort` option to stringify
 * adds type definition to `stringify`'s options
