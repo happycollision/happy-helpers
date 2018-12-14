@@ -4,6 +4,10 @@ I have found tons of use for all these functions. If I don't ever find time to d
 
 # Changelog
 
+## 1.4.0
+* adds `shuffleInPlace` and `shuffleClone`
+* adds jsdoc to the `toType` function
+
 ## 1.3.0
 * adds `deepEqual` function
 * adds `sort` option to stringify
