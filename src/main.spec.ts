@@ -380,3 +380,28 @@ describe('deepEqual', () => {
 
 
 })
+
+describe('shuffle', () => {
+  const shuffleInPlace = hf.shuffleInPlace;
+  const shuffleClone = hf.shuffleClone;
+
+  it('shuffleInPlace mutates the array', () => {
+    const someArr = [1, 2];
+    expect(shuffleInPlace(someArr)).toBe(someArr);
+  })
+  it('shuffleInPlace shuffles the array', () => {
+    const bigArray = Array.from(Array(100).keys())
+    const copyArr = bigArray.concat([]);
+    expect(shuffleInPlace(copyArr)).not.toEqual(bigArray);
+  })
+
+  it('shuffleClone does not mutate the array', () => {
+    const someArr = [1, 2];
+    expect(shuffleClone(someArr)).not.toBe(someArr);
+  })
+  it('shuffleClone shuffles the array', () => {
+    const bigArray = Array.from(Array(100).keys())
+    const copyArr = bigArray.concat([]);
+    expect(shuffleClone(copyArr)).not.toEqual(bigArray);
+  })
+})

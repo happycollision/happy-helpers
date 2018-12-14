@@ -30,6 +30,30 @@ export function clone<T extends object | any[]>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
+/**
+ * Knuth Fisher Yates shuffle. Operates on the array directly
+ */
+export function shuffleInPlace<T extends any[]> (arr: T) {
+  let temp;
+  let j;
+  let i = arr.length;
+  while (--i) {
+    j = ~~(Math.random() * (i + 1)); // tslint:disable-line no-bitwise
+    temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+
+  return arr;
+}
+
+/**
+ * Knuth Fisher Yates shuffle. Preserves original, returns a clone.
+ */
+export function shuffleClone<T extends any[]> (arr: T) {
+  return clone(shuffleInPlace(arr));
+}
+
 export function isEmpty (val: any): boolean {
   const emptyTypes = ['null', 'undefined'];
   const checkableTypes = ['object', 'array', 'arguments', 'json', 'string'];
