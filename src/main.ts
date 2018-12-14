@@ -1,21 +1,23 @@
 // see https://javascriptweblog.wordpress.com/2011/08/08/fixing-the-javascript-typeof-operator/
 // via http://stackoverflow.com/a/7390612/1386201
-/*
-    toType({a: 4}); //"object"
-    toType([1, 2, 3]); //"array"
-    (function() {console.log(toType(arguments))})(); //"arguments"
-    toType(new ReferenceError); //"error"
-    toType(new Date); //"date"
-    toType(/a-z/); //"regexp"
-    toType(Math); //"math"
-    toType(JSON); //"json"
-    toType(new Number(4)); //"number"
-    toType(new String("abc")); //"string"
-    toType(new Boolean(true)); //"boolean"
-    toType(null); //"null"
-    toType(); //"undefined"
-    toType( () => {} ); //"function"
-*/
+
+/**
+ * @example
+ * toType({a: 4}); // 'object'
+ * toType([1, 2, 3]); // 'array'
+ * (function() {console.log(toType(arguments))})(); // 'arguments'
+ * toType(new ReferenceError); // 'error'
+ * toType(new Date); // 'date'
+ * toType(/a-z/); // 'regexp'
+ * toType(Math); // 'math'
+ * toType(JSON); // 'json'
+ * toType(new Number(4)); // 'number'
+ * toType(new String('abc')); // 'string'
+ * toType(new Boolean(true)); // 'boolean'
+ * toType(null); // 'null'
+ * toType(); // 'undefined'
+ * toType( () => {} ); // 'function'
+ */
 export function toType (val?: any): string {
   return ({}).toString.call(val).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
 }
