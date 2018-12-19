@@ -124,6 +124,27 @@ describe('nestedPropertyTest', () => {
   });
 });
 
+describe('nestedPropertyOrDefault', () => {
+  let nestedPropertyOrDefault = hf.nestedPropertyOrDefault;
+
+  describe('when the property exists', () => {
+    it('returns the property', () => {
+      const nested = { level1: { level2: 'I am here' } };
+      expect(nestedPropertyOrDefault(nested, 'level1.level2')).toEqual('I am here');
+    })
+  })
+  describe('when the property is absent', () => {
+    it('returns null', () => {
+      const nested = { level1: { level2: 'I am here' } };
+      expect(nestedPropertyOrDefault(nested, 'level1.level2.level3')).toEqual(null);
+    })
+    it('returns the default supplied', () => {
+      const nested = { level1: { level2: 'I am here' } };
+      expect(nestedPropertyOrDefault(nested, 'level1.level2.level3', 'default value')).toEqual('default value');
+    })
+  })
+})
+
 describe('toType', () => {
   let toType = hf.toType;
   it('returns all expected strings', () => {

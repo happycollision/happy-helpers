@@ -165,6 +165,18 @@ export function nestedPropertyExists (
   return nestedPropertyDetails(obj, propertyPath).exists;
 }
 
+/**
+ * Return the value of a nested property in an object, or the default value if the path does not exist.
+ * @param obj any object
+ * @param propertyPath string representing the path to the desired value. Eg. "config.person.name"
+ * @param defaultValue the value you'd like returned if the nested property does not exist. Defaults to null.
+ */
+export function nestedPropertyOrDefault(obj: object, propertyPath: string, defaultValue: any = null): null | any {
+  const result = nestedPropertyDetails(obj, propertyPath);
+  if (result.exists) return result.finalValidProperty;
+  return defaultValue;
+}
+
 export function changePropsInitialCase (
   obj: object,
   whichCase: 'UpperFirst' | string,
