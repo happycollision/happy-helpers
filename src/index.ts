@@ -62,10 +62,10 @@ const checkableTypes = ["object", "array", "arguments", "json", "string"];
 
 export function isEmpty(val: any): boolean {
   const type = toType(val);
-  if (emptyTypes.indexOf(type) > -1) {
+  if (emptyTypes.includes(type)) {
     return true;
   }
-  if (checkableTypes.indexOf(type) > -1) {
+  if (checkableTypes.includes(type)) {
     if (type === "string") return val.length === 0; // IE fails on the next line if a string.
     if (Object.getOwnPropertyNames(val).length === 0) return true;
     return val.length === 0;
@@ -245,7 +245,7 @@ export function valuesArrayFromObject(obj: object): any[] {
 }
 
 export function objectContainsValue(val: any, obj: object): boolean {
-  return valuesArrayFromObject(obj).indexOf(val) !== -1;
+  return valuesArrayFromObject(obj).includes(val);
 }
 
 export function objectKeyForValue<T extends object, K extends keyof T>(
@@ -264,7 +264,7 @@ export function objectKeyForValue<T extends object, K extends keyof T>(
 const emptyReturns = ["null", "undefined"];
 
 export function forceArray<T>(val: T | T[]): T[] {
-  if (emptyReturns.indexOf(toType(val)) !== -1) return [];
+  if (emptyReturns.includes(toType(val))) return [];
   if (toType(val) !== "array") {
     return [val] as T[];
   }
@@ -283,6 +283,7 @@ const noCircularRefs = () => {
         key = "__BASE_OBJECT__"; // eslint-disable-line no-param-reassign
         isFirstRun = false;
       }
+
       const indexOfFoundValue = valCache.indexOf(value);
       if (indexOfFoundValue !== -1) {
         // Circular reference found, discard key
@@ -351,7 +352,6 @@ const stringifyOptions = { sort: true };
  */
 // @ts-expect-error
 export function deepEqual(objA, objB): boolean {
-  const stringifyOptions = { sort: true };
   return (
     stringify(objA, stringifyOptions) === stringify(objB, stringifyOptions)
   );
