@@ -466,9 +466,14 @@ describe("shuffle", () => {
   });
 
   it("shuffleClone does not mutate the array", () => {
-    const someArr = [1, 2];
-    expect(shuffleClone(someArr)).not.toBe(someArr);
+    const getArr = () => [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const input = getArr();
+    const output = shuffleClone(input);
+
+    expect(output).not.toBe(input);
+    expect(input).toEqual(getArr());
   });
+
   it("shuffleClone shuffles the array", () => {
     const bigArray = Array.from(Array(100).keys());
     const copyArr = bigArray.concat([]);

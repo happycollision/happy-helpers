@@ -7,6 +7,7 @@ I have found tons of use for all these functions. If I don't ever find time to d
 ## 1.6.0
 
 - Export package with esm option
+- Fix bug where shuffleClone was mutating the original arr
 
 ## 1.5.0
 

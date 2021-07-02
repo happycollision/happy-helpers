@@ -54,7 +54,7 @@ export function shuffleInPlace<T extends any[]>(arr: T) {
  * Knuth Fisher Yates shuffle. Preserves original, returns a clone.
  */
 export function shuffleClone<T extends any[]>(arr: T) {
-  return clone(shuffleInPlace(arr));
+  return shuffleInPlace(clone(arr));
 }
 
 export function isEmpty(val: any): boolean {
