@@ -4,6 +4,10 @@ I have found tons of use for all these functions. If I don't ever find time to d
 
 # Changelog
 
+## 1.6.0
+
+- Export package with esm option
+
 ## 1.5.0
 
 - adds `nestedPropertyOrDefault`
