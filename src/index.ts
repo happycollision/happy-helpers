@@ -57,9 +57,10 @@ export function shuffleClone<T extends any[]>(arr: T) {
   return shuffleInPlace(clone(arr));
 }
 
+const emptyTypes = ["null", "undefined"];
+const checkableTypes = ["object", "array", "arguments", "json", "string"];
+
 export function isEmpty(val: any): boolean {
-  const emptyTypes = ["null", "undefined"];
-  const checkableTypes = ["object", "array", "arguments", "json", "string"];
   const type = toType(val);
   if (emptyTypes.indexOf(type) > -1) {
     return true;
@@ -260,8 +261,9 @@ export function objectKeyForValue<T extends object, K extends keyof T>(
   }, "" as K);
 }
 
+const emptyReturns = ["null", "undefined"];
+
 export function forceArray<T>(val: T | T[]): T[] {
-  const emptyReturns = ["null", "undefined"];
   if (emptyReturns.indexOf(toType(val)) !== -1) return [];
   if (toType(val) !== "array") {
     return [val] as T[];
