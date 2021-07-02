@@ -1,6 +1,8 @@
 // see https://javascriptweblog.wordpress.com/2011/08/08/fixing-the-javascript-typeof-operator/
 // via http://stackoverflow.com/a/7390612/1386201
 
+type Hash<T = any> = Record<string, T>;
+
 /**
  * @example
  * toType({a: 4}); // 'object'
@@ -89,39 +91,38 @@ export function wrapObjectWithProperty<T extends object, K extends string>(
   return wrapper;
 }
 
-export function isObject(x: any): boolean {
+export function isObject(x: any): x is object {
   return toType(x) === "object";
 }
 
-// Traverses an object.
+// Traverses an object whose keys are strings.
 // callback should return an array with a key, then a value if constructing a
 // new object is desired. Kind of like Array.map, but for objects
-export function traverseObject<T extends object>(
+export function traverseObject<T extends Hash>(
   obj: T,
-  callback: (key: string, value: any) => [string, any] | void,
+  callback: (key: string, value: any) => readonly [string, any] | void,
   recursive = false,
   preserveOriginal = true
 ): T | any {
   const newObject = preserveOriginal ? clone(obj) : obj;
-  const returnedObj = {};
+  const returnedObj = {} as T;
+
   for (const key in newObject) {
     if (newObject.hasOwnProperty(key) === false) continue;
-    if (isObject(newObject[key]) && recursive) {
-      const args = Array.from(arguments);
-      const argsMinusFirst = [...args].slice(1);
-      const recursedObject = traverseObject.apply(null, [
-        // @ts-expect-error
-        newObject[key],
-        ...argsMinusFirst,
-      ]);
-      if (!isEmpty(recursedObject)) {
-        newObject[key] = recursedObject;
-      }
+    const value = newObject[key];
+
+    if (isObject(value) && recursive) {
+      newObject[key] = traverseObject(
+        value,
+        callback,
+        recursive,
+        preserveOriginal
+      );
     }
+
     const keyValArray = callback(key, newObject[key]);
     if (Array.isArray(keyValArray) && keyValArray.length === 2) {
-      // @ts-expect-error
-      returnedObj[keyValArray[0]] = keyValArray[1];
+      returnedObj[keyValArray[0] as keyof T] = keyValArray[1];
     } else if (!isEmpty(keyValArray)) {
       throw new Error(
         `It looks like you might have been trying to construct a new object, but you returned something other than an array that looks like [key, value]. You returned ${keyValArray}`
@@ -144,11 +145,11 @@ export function nestedPropertyDetails(
   let exists = true;
   const existingPath: string[] = [];
   while (exists && pathParts.length > 0) {
-    const newPart = pathParts.shift();
-    // @ts-expect-error
+    const newPart = pathParts.shift() as keyof typeof currentObject;
+
     if (newPart && currentObject[newPart]) {
       existingPath.push(newPart);
-      // @ts-expect-error
+
       currentObject = currentObject[newPart];
     } else {
       exists = false;
@@ -208,13 +209,13 @@ export function changePropsInitialCase(
   return traverseObject(
     newObj,
     (key, prop) => {
-      const originals: [string, any] = [key, prop];
+      const originals = [key, prop] as const;
       if (typeof key !== "string") return originals;
       if (key.charAt(0).match(regex) === null) return originals;
       const newKey = makeAspVersion
         ? firstCharToUpper(key)
         : firstCharToLower(key);
-      return [newKey, prop];
+      return [newKey, prop] as [typeof key, typeof prop];
     },
     recursive
   );
@@ -240,8 +241,8 @@ export function valuesArrayFromObject(obj: object): any[] {
   if (!isObject(obj)) {
     throw new Error(`'obj' was not an object. Was ${toType(obj)}`);
   }
-  // @ts-expect-error
-  return Object.keys(obj).map((key) => obj[key]);
+
+  return Object.keys(obj).map((key) => obj[key as keyof typeof obj]);
 }
 
 export function objectContainsValue(val: any, obj: object): boolean {
@@ -276,8 +277,7 @@ const noCircularRefs = () => {
   const keyCache: any[] = [];
   let isFirstRun = true;
 
-  // @ts-expect-error
-  return (key, value) => {
+  return (key: string, value: any) => {
     if (typeof value === "object" && value !== null) {
       if (isFirstRun) {
         key = "__BASE_OBJECT__"; // eslint-disable-line no-param-reassign
@@ -303,8 +303,7 @@ export interface IStringifyOptions {
   sort: boolean;
 }
 export function stringify(
-  // @ts-expect-error
-  obj,
+  obj: Hash,
   options: Partial<IStringifyOptions> = {}
 ): string {
   const defaults: IStringifyOptions = {
@@ -319,10 +318,9 @@ export function stringify(
       const newObj = (obj as any[]).sort();
       return finalStringification(newObj, tabLength, stripQuotes);
     } else if (toType(obj) === "object") {
-      const newObj = {};
+      const newObj = {} as typeof obj;
       const keys = Object.keys(obj).sort();
       keys.forEach((key) => {
-        // @ts-expect-error
         newObj[key] = obj[key];
       });
       return finalStringification(newObj, tabLength, stripQuotes);
@@ -333,8 +331,7 @@ export function stringify(
 }
 
 function finalStringification(
-  // @ts-expect-error
-  obj,
+  obj: Hash,
   tabLength: number,
   stripQuotes: boolean
 ): string {
@@ -350,8 +347,8 @@ const stringifyOptions = { sort: true };
 /**
  * Returns true if the deep values of an object are equal.
  */
-// @ts-expect-error
-export function deepEqual(objA, objB): boolean {
+
+export function deepEqual(objA: Hash, objB: Hash): boolean {
   return (
     stringify(objA, stringifyOptions) === stringify(objB, stringifyOptions)
   );
