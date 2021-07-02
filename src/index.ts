@@ -41,7 +41,7 @@ export function shuffleInPlace<T extends any[]>(arr: T) {
   let j;
   let i = arr.length;
   while (--i) {
-    j = ~~(Math.random() * (i + 1)); // tslint:disable-line no-bitwise
+    j = ~~(Math.random() * (i + 1));
     temp = arr[i];
     arr[i] = arr[j];
     arr[j] = temp;
