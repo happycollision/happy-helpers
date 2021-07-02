@@ -344,6 +344,8 @@ function finalStringification(
   return str;
 }
 
+const stringifyOptions = { sort: true };
+
 /**
  * Returns true if the deep values of an object are equal.
  */
