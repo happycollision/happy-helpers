@@ -1,46 +1,36 @@
 {
   "name": "happy-helpers",
   "private": false,
-  "version": "1.5.0",
+  "version": "1.6.0-beta.1",
   "description": "Some helpful javascript functions",
-  "main": "lib/main.js",
-  "types": "lib/main.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "author": "Don Denton",
   "scripts": {
-    "lint": "tslint -p .",
-    "posttest": "npm run lint",
     "release:major": "npm version major && git push --follow-tags",
     "release:minor": "npm version minor && git push --follow-tags",
     "release:patch": "npm version patch && git push --follow-tags",
     "start": "npm run test",
-    "test": "jest --watch",
-    "pubtest": "jest",
-    "build": "tsc",
-    "prepublishOnly": "npm run pubtest && npm run build"
+    "test": "jest",
+    "format": "prettier . --write",
+    "prebuild": "rm -rf ./dist",
+    "build": "npm run build:es5 && npm run build:es6",
+    "build:es5": "tsc",
+    "build:es6": "tsc --project . --outDir dist/esm --target es6",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "repository": "https://github.com/happycollision/happy-helpers",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
   "keywords": [],
-  "jest": {
-    "transform": {
-      "^.+\\.(t|j)sx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
-  },
   "devDependencies": {
-    "@types/jest": "^22.2.2",
-    "@types/node": "^9.6.4",
-    "jest": "^22.4.3",
-    "ts-jest": "^22.4.2",
-    "ts-node": "^5.0.1",
-    "tslint": "^5.10.0",
-    "typescript": "^2.8.1"
+    "@types/jest": "^26.0.23",
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "ts-jest": "^27.0.3",
+    "typescript": "^4.3.5"
   }
 }

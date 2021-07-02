@@ -1,7 +1,8 @@
 node_modules
 tsconfig.json
 src
-yarn.lock
+jest.config.js
+package-lock.json
 
 .gitignore
 .gitattributes

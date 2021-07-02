@@ -1,23 +1,15 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "strictNullChecks": true,
-    "noEmitHelpers": true,
+    "moduleResolution": "Node",
+    "strict": true,
     "sourceMap": true,
-    "noImplicitAny": false,
-    "outDir": "lib",
+    "removeComments": true,
+    "outDir": "dist/cjs",
     "declaration": true,
-    "lib": [
-      "es2015",
-      "dom"
-    ]
+    "noEmitOnError": false,
+    "baseUrl": "."
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "**/*.spec.*"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.*", "node_modules"]
 }

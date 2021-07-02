@@ -5,41 +5,52 @@ I have found tons of use for all these functions. If I don't ever find time to d
 # Changelog
 
 ## 1.5.0
-* adds `nestedPropertyOrDefault`
+
+- adds `nestedPropertyOrDefault`
 
 ## 1.4.0
-* adds `shuffleInPlace` and `shuffleClone`
-* adds jsdoc to the `toType` function
+
+- adds `shuffleInPlace` and `shuffleClone`
+- adds jsdoc to the `toType` function
 
 ## 1.3.0
-* adds `deepEqual` function
-* adds `sort` option to stringify
-* adds type definition to `stringify`'s options
+
+- adds `deepEqual` function
+- adds `sort` option to stringify
+- adds type definition to `stringify`'s options
 
 ### 1.2.2
-* `nestedPropertyDetails` now properly handles circular objects
+
+- `nestedPropertyDetails` now properly handles circular objects
 
 ### 1.2.1
-* update package to export types properly
+
+- update package to export types properly
 
 ## 1.2.0
-* Adds Typescript types
-* fixes a couple bugs caught by Typescript
+
+- Adds Typescript types
+- fixes a couple bugs caught by Typescript
 
 ### 1.1.1
-* updates this changelog to add 1.1.0. Oops.
+
+- updates this changelog to add 1.1.0. Oops.
 
 ## 1.1.0
-* adds a `stringify` function.
+
+- adds a `stringify` function.
   > The stringify function creates a nicely indented JSON string of any object. Even those with circular references.
   >
   > You can optionally strip out the quotes around properties and change the indent amount.
 
 ### 1.0.2
-* updates `package.json` with the correct repository information. oops.
+
+- updates `package.json` with the correct repository information. oops.
 
 ### 1.0.1
-* fix for a bug in IE when using the `isEmpty` function with a string as the arg
+
+- fix for a bug in IE when using the `isEmpty` function with a string as the arg
 
 ## 1.0.0
-* inital release
+
+- inital release
